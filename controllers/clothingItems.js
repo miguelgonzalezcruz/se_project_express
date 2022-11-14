@@ -27,7 +27,7 @@ const createItem = (req, res) => {
       owner,
     })
     .then((data) => res.status(201).send(data))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 const deleteItem = (req, res) => {
@@ -42,7 +42,7 @@ const deleteItem = (req, res) => {
 
       res.send(data);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 const likeItem = (req, res) => {
@@ -59,9 +59,9 @@ const likeItem = (req, res) => {
       throw error;
     })
     .then((data) => {
-      res.status(201).send(data);
+      res.status(200).send(data);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 const dislikeItem = (req, res) => {
@@ -80,7 +80,7 @@ const dislikeItem = (req, res) => {
     .then((data) => {
       res.status(201).send(data);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.status(400).send({ message: err.message }));
 };
 
 module.exports = {

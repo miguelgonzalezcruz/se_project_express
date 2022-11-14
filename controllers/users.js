@@ -16,14 +16,13 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   User.findById(req.params.userId)
+    .orFail(() => {
+      const error = new Error('No user found');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((data) => {
-      if (!data) {
-        res.status(404).send({ message: 'No user found' });
-
-        return;
-      }
-
-      res.send(data);
+      res.status(201).send(data);
     })
     .catch((err) => res.status(500).send({ message: err.message }));
 };

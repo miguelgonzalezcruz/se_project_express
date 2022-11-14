@@ -45,4 +45,48 @@ const deleteItem = (req, res) => {
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
-module.exports = { getItems, createItem, deleteItem };
+const likeItem = (req, res) => {
+  clothingItem
+    .findByIdAndUpdate(
+      req.params.itemId,
+      { $addToSet: { likes: req.user._id } },
+      // eslint-disable-next-line comma-dangle
+      { new: true }
+    )
+    .orFail(() => {
+      const error = new Error('No user found');
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((data) => {
+      res.status(201).send(data);
+    })
+    .catch((err) => res.status(500).send({ message: err.message }));
+};
+
+const dislikeItem = (req, res) => {
+  clothingItem
+    .findByIdAndUpdate(
+      req.params.itemId,
+      { $pull: { likes: req.user._id } },
+      // eslint-disable-next-line comma-dangle
+      { new: true }
+    )
+    .orFail(() => {
+      const error = new Error('No user found');
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((data) => {
+      res.status(201).send(data);
+    })
+    .catch((err) => res.status(500).send({ message: err.message }));
+};
+
+module.exports = {
+  getItems,
+  createItem,
+  deleteItem,
+  likeItem,
+  dislikeItem,
+};

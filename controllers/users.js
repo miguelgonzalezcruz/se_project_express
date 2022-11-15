@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const handleErrors = require('../utils/errors');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -24,7 +25,9 @@ const getUser = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      handleErrors(err, res);
+    });
 };
 
 const createUser = (req, res) => {

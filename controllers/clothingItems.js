@@ -15,6 +15,20 @@ const getItems = (req, res) => {
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
+const getItem = (req, res) => {
+  clothingItem
+    .findById(req.params.itemId)
+    .orFail(() => {
+      const error = new Error('No item found');
+      error.statusCode = 404;
+      throw error;
+    })
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => res.status(400).send({ message: err.message }));
+};
+
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
@@ -89,4 +103,5 @@ module.exports = {
   deleteItem,
   likeItem,
   dislikeItem,
+  getItem,
 };

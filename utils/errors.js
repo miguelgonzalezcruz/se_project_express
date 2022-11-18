@@ -1,11 +1,6 @@
-/* eslint-disable operator-linebreak */
 const errorHandling = (err, res) => {
-  if (
-    err.statusCode === 400 ||
-    err.name === 'ValidationError' ||
-    err.name === 'CastError'
-  ) {
-    res.status(err.statusCode).send({ message: 'Ouch! Invalid Input' });
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
+    res.status(400).send({ message: 'Ouch! Invalid Input' });
 
     return;
   }

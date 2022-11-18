@@ -38,17 +38,10 @@ const notFoundError = (err, res) => {
     .send({ message: 'Sorry, this is embarrasing. No item found' });
 };
 
-const errorCodes = {
-  badRequest: 400,
-  notFound: 404,
-  defaultError: 500,
-};
-
 module.exports = {
   errorHandling,
   errorDefault,
   orFailError,
   badRequestError,
   notFoundError,
-  errorCodes,
 };

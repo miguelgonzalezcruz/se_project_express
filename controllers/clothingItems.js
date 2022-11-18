@@ -5,7 +5,6 @@ const {
   errorDefault,
   orFailError,
   badRequestError,
-  notFoundError,
 } = require('../utils/errors');
 
 const getItems = (req, res) => {
@@ -51,12 +50,11 @@ const createItem = (req, res) => {
 const deleteItem = (req, res) => {
   clothingItem
     .findByIdAndRemove(req.params.itemId)
+    .orFail(() => {
+      orFailError();
+    })
     .then((data) => {
-      if (!data) {
-        notFoundError(res);
-      }
-
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((err) => {
       errorHandling(err, res);

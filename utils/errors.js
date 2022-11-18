@@ -16,20 +16,16 @@ const notFoundError = (err, res) => {
 
 const errorHandling = (err, res) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
-    res.status(400).send({ message: 'Ouch! Invalid Input' });
+    res.status(400).send({ message: err.message });
 
     return;
   }
   if (err.statusCode === 404) {
-    res
-      .status(err.statusCode)
-      .send({ message: 'Sorry, this is embarrasing. No item found' });
+    res.status(err.statusCode).send({ message: err.message });
 
     return;
   }
-  res
-    .status(500)
-    .send({ message: 'Ups! An error has occurred on the server.' });
+  res.status(500).send({ message: err.message });
 };
 
 module.exports = {

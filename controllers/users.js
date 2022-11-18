@@ -1,32 +1,24 @@
 const User = require('../models/user');
-const handleErrors = require('../utils/errors');
+const { errorHandling, errorDefault, orFailError } = require('../utils/errors');
 
 const getUsers = (req, res) => {
   User.find({})
     .then((data) => {
-      if (data.length === 0) {
-        res.status(404).send({ message: 'No users found' });
-
-        return;
-      }
-
-      res.send(data);
+      res.status(200).send(data);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(() => errorHandling(res));
 };
 
 const getUser = (req, res) => {
   User.findById(req.params.userId)
     .orFail(() => {
-      const error = new Error('No user found');
-      error.statusCode = 404;
-      throw error;
+      orFailError();
     })
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      handleErrors(err, res);
+      errorDefault(err, res);
     });
 };
 
@@ -35,7 +27,9 @@ const createUser = (req, res) => {
 
   User.create({ name, avatar })
     .then((data) => res.status(201).send(data))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => {
+      errorHandling(err, res);
+    });
 };
 
 module.exports = { getUsers, getUser, createUser };

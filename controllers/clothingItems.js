@@ -1,32 +1,34 @@
 const clothingItem = require('../models/clothingItem');
 
+const {
+  errorHandling,
+  errorDefault,
+  orFailError,
+  badRequestError,
+  notFoundError,
+} = require('../utils/errors');
+
 const getItems = (req, res) => {
   clothingItem
     .find({})
     .then((data) => {
-      if (data.length === 0) {
-        res.status(404).send({ message: 'No items found' });
-
-        return;
-      }
-
-      res.send(data);
+      res.status(200).send(data);
     })
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => errorDefault(res, err));
 };
 
 const getItem = (req, res) => {
   clothingItem
     .findById(req.params.itemId)
     .orFail(() => {
-      const error = new Error('No item found');
-      error.statusCode = 404;
-      throw error;
+      orFailError();
     })
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      badRequestError(err, res);
+    });
 };
 
 const createItem = (req, res) => {
@@ -41,7 +43,9 @@ const createItem = (req, res) => {
       owner,
     })
     .then((data) => res.status(201).send(data))
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      errorHandling(err, res);
+    });
 };
 
 const deleteItem = (req, res) => {
@@ -49,14 +53,14 @@ const deleteItem = (req, res) => {
     .findByIdAndRemove(req.params.itemId)
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'No item found' });
-
-        return;
+        notFoundError(res);
       }
 
       res.send(data);
     })
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      errorHandling(err, res);
+    });
 };
 
 const likeItem = (req, res) => {
@@ -68,14 +72,14 @@ const likeItem = (req, res) => {
       { new: true }
     )
     .orFail(() => {
-      const error = new Error('No user found');
-      error.statusCode = 404;
-      throw error;
+      orFailError();
     })
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      errorHandling(err, res);
+    });
 };
 
 const dislikeItem = (req, res) => {
@@ -88,13 +92,16 @@ const dislikeItem = (req, res) => {
     )
     .orFail(() => {
       const error = new Error('No user found');
-      error.statusCode = 404;
-      throw error;
+      if (error.statusCode === 404) {
+        throw error;
+      }
     })
     .then((data) => {
-      res.status(201).send(data);
+      res.status(200).send(data);
     })
-    .catch((err) => res.status(400).send({ message: err.message }));
+    .catch((err) => {
+      errorHandling(err, res);
+    });
 };
 
 module.exports = {

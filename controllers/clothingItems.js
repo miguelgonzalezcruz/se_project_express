@@ -1,6 +1,6 @@
 const clothingItem = require('../models/clothingItem');
 
-const { errorHandling, errorDefault, orFailError } = require('../utils/errors');
+const { errorHandling, defaultError, orFailError } = require('../utils/errors');
 
 const getItems = (req, res) => {
   clothingItem
@@ -8,7 +8,7 @@ const getItems = (req, res) => {
     .then((data) => {
       res.send(data);
     })
-    .catch((err) => errorDefault(res, err));
+    .catch((err) => defaultError(res, err));
 };
 
 const getItem = (req, res) => {

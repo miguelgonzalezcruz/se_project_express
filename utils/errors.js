@@ -14,18 +14,27 @@ const notFoundError = (err, res) => {
     .send({ message: 'Sorry, this is embarrasing. No item found' });
 };
 
+const defaultError = (err, res) => {
+  res.status(500).send({ message: 'Ouch! something went wrong' });
+};
+
 const errorHandling = (err, res) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
-    res.status(400).send({ message: err.message });
+    const badRequest = 400;
+    res.status(badRequest).send({ message: 'Ouch! Invalid Input' });
 
     return;
   }
   if (err.statusCode === 404) {
-    res.status(err.statusCode).send({ message: err.message });
+    const notFound = 404;
+    res
+      .status(notFound)
+      .send({ message: 'Sorry, this is embarrasing. No item found' });
 
     return;
   }
-  res.status(500).send({ message: err.message });
+  const serverError = 500;
+  res.status(serverError).send({ message: 'Ouch! something went wrong' });
 };
 
 module.exports = {
@@ -33,4 +42,19 @@ module.exports = {
   orFailError,
   badRequestError,
   notFoundError,
+  defaultError,
 };
+
+// const errorHandling = (err, res) => {
+//   if (err.name === 'ValidationError' || err.name === 'CastError') {
+//     res.status(400).send({ message: err.message });
+
+//     return;
+//   }
+//   if (err.statusCode === 404) {
+//     res.status(err.statusCode).send({ message: err.message });
+
+//     return;
+//   }
+//   res.status(500).send({ message: err.message });
+// };

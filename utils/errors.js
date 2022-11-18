@@ -14,22 +14,22 @@ const notFoundError = (err, res) => {
     .send({ message: 'Sorry, this is embarrasing. No item found' });
 };
 
-const errorDefault = (err, res) => {
-  res.status(500).send({ message: 'Sorry, something went wrong' });
-};
-
 const errorHandling = (err, res) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
-    notFoundError(err, res);
+    res.status(400).send({ message: 'Ouch! Invalid Input' });
 
     return;
   }
   if (err.statusCode === 404) {
-    notFoundError(err, res);
+    res
+      .status(err.statusCode)
+      .send({ message: 'Sorry, this is embarrasing. No item found' });
 
     return;
   }
-  res.status(500).errorDefault(res, err);
+  res
+    .status(500)
+    .send({ message: 'Ups! An error has occurred on the server.' });
 };
 
 module.exports = {
@@ -37,5 +37,4 @@ module.exports = {
   orFailError,
   badRequestError,
   notFoundError,
-  errorDefault,
 };

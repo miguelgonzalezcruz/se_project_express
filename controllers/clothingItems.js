@@ -1,17 +1,12 @@
 const clothingItem = require('../models/clothingItem');
 
-const {
-  errorHandling,
-  errorDefault,
-  orFailError,
-  badRequestError,
-} = require('../utils/errors');
+const { errorHandling, errorDefault, orFailError } = require('../utils/errors');
 
 const getItems = (req, res) => {
   clothingItem
     .find({})
     .then((data) => {
-      res.status(200).send(data);
+      res.send(data);
     })
     .catch((err) => errorDefault(res, err));
 };
@@ -26,7 +21,7 @@ const getItem = (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      badRequestError(err, res);
+      errorHandling(err, res);
     });
 };
 

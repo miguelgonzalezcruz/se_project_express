@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const { errorHandling, errorDefault, orFailError } = require('../utils/errors');
+const { errorHandling, orFailError } = require('../utils/errors');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -18,7 +18,7 @@ const getUser = (req, res) => {
       res.status(200).send(data);
     })
     .catch((err) => {
-      errorDefault(err, res);
+      errorHandling(err, res);
     });
 };
 

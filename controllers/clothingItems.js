@@ -89,10 +89,7 @@ const dislikeItem = (req, res) => {
       { new: true }
     )
     .orFail(() => {
-      const error = new Error('No user found');
-      if (error.statusCode === 404) {
-        throw error;
-      }
+      orFailError();
     })
     .then((data) => {
       res.status(200).send(data);

@@ -33,6 +33,12 @@ const errorHandling = (err, res) => {
 
     return;
   }
+  if (err.statusCode === 409) {
+    const conflict = 409;
+    res.status(conflict).send({ message: 'Email already exists' });
+
+    return;
+  }
   const serverError = 500;
   res.status(serverError).send({ message: 'Ouch! something went wrong' });
 };

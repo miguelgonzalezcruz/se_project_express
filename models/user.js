@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -39,5 +40,10 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 });
+
+userSchema.statics.findUserByCredentials = function findUserByCredentials(
+  email,
+  password
+) {};
 
 module.exports = mongoose.model('user', userSchema);

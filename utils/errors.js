@@ -39,6 +39,12 @@ const errorHandling = (err, res) => {
 
     return;
   }
+  if (err.statusCode === 401) {
+    const unauthorized = 401;
+    res.status(unauthorized).send({ message: 'Unauthorized' });
+
+    return;
+  }
   const serverError = 500;
   res.status(serverError).send({ message: 'Ouch! something went wrong' });
 };

@@ -3,6 +3,8 @@
 /* eslint-disable object-curly-newline */
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../utils/config');
 const { errorHandling, orFailError } = require('../utils/errors');
 
 const getUsers = (req, res) => {
@@ -50,4 +52,18 @@ const createUser = (req, res) => {
     });
 };
 
-module.exports = { getUsers, getUser, createUser };
+const login = (req, res) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: '7d',
+      });
+      res.send({ token });
+    })
+    .catch((err) => {
+      errorHandling(err, res);
+    });
+};
+
+module.exports = { getUsers, getUser, createUser, login };

@@ -25,3 +25,6 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
+
+app.post('/signin', login);
+app.post('/signup', createUser);

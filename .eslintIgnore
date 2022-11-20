@@ -1,0 +1,8 @@
+
+**/*.js
+{
+    "ignorePatterns": ["temp.js", "**/vendor/*.js"],
+    "rules": {
+        "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    }
+}

@@ -1,10 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const auth = require('./middleware/auth');
 
 const { PORT = 3001 } = process.env;
 mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
+
+const { createUser, login } = require('./middleware/auth');
+
+app.use(auth);
 
 app.use(express.json());
 

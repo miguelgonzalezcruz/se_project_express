@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
 const mongoose = require('mongoose');
 const validator = require('validator');

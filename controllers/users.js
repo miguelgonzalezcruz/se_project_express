@@ -34,20 +34,18 @@ const getUser = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, avatar, email } = req.body;
-  User.findOne({ email })
-    .select('password')
-    .then((user, err) => {
-      if (user) {
-        errorHandling(err, res);
-      }
-      return bcrypt.hash(req.body.password, 10).then((hash) => {
-        User.create({ name, avatar, email, password: hash })
-          .then((data) => res.status(201).send(data))
-          .catch(() => {
-            errorHandling(err, res);
-          });
-      });
+  User.findOne({ email }).then((user, err) => {
+    if (user) {
+      errorHandling(err, res);
+    }
+    return bcrypt.hash(req.body.password, 10).then((hash) => {
+      User.create({ name, avatar, email, password: hash })
+        .then((data) => res.status(201).send(data))
+        .catch(() => {
+          errorHandling(err, res);
+        });
     });
+  });
 };
 
 const login = (req, res) => {

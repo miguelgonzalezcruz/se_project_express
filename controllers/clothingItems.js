@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-undef */
 const clothingItem = require('../models/clothingItem');
 
 const { errorHandling, defaultError, orFailError } = require('../utils/errors');

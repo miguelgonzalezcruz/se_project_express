@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable function-paren-newline */
 /* eslint-disable operator-linebreak */
 /* eslint-disable padded-blocks */
 /* eslint-disable object-curly-newline */
@@ -31,27 +34,18 @@ const getUser = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, avatar, email } = req.body;
-  User.findOne({ email })
-    .select('+password')
-    .then((user, err) => {
-      if (user) {
-        return errorHandling(err, res);
-      }
-      return bcrypt.hash(req.body.password, 10).then((hash) => {
-        User.create({
-          name: name || 'Elise Bouer',
-          avatar:
-            avatar ||
-            'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Elise.png',
-          email: email || '',
-          password: hash,
+  User.findOne({ email }).then((user) => {
+    if (user) {
+      errorHandling(res);
+    }
+    return bcrypt.hash(req.body.password, 10).then((hash) => {
+      User.create({ name, avatar, email, password: hash })
+        .then((data) => res.status(201).send(data))
+        .catch((err) => {
+          errorHandling(err, res);
         });
-      });
-    })
-    .then((data) => res.status(201).send(data))
-    .catch((err) => {
-      errorHandling(err, res);
     });
+  });
 };
 
 const login = (req, res) => {

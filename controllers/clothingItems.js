@@ -43,6 +43,9 @@ const createItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
+  if (req.user._id !== req.params.owner) {
+    return errorHandling(err, res);
+  }
   clothingItem
     .findByIdAndRemove(req.params.itemId)
     .orFail(() => {

@@ -45,6 +45,12 @@ const errorHandling = (err, res) => {
 
     return;
   }
+  if (err.statusCode === 403) {
+    const forbidden = 403;
+    res.status(forbidden).send({ message: 'Forbidden' });
+
+    return;
+  }
   const serverError = 500;
   res.status(serverError).send({ message: 'Ouch! something went wrong' });
 };

@@ -13,13 +13,6 @@ app.use(auth);
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6371eceb5f38f2d1e505b76f',
-  };
-  next();
-});
-
 app.use('/users', require('./routes/users'));
 app.use('/items', require('./routes/clothingItems'));
 

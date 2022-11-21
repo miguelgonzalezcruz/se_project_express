@@ -32,6 +32,7 @@ const getUser = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email } = req.body;
   User.findOne({ email })
+    .select('+password')
     .then((user, err) => {
       if (user) {
         return errorHandling(err, res);

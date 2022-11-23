@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { createUser, login } = require('./controllers/users');
+const { getItems } = require('./controllers/clothingItems');
 const auth = require('./middlewares/auth');
 
 const { PORT = 3001 } = process.env;
@@ -10,6 +11,7 @@ const app = express();
 
 app.post('/signin', login);
 app.post('/signup', createUser);
+app.get('/', getItems);
 
 app.use(auth);
 

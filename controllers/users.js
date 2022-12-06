@@ -33,14 +33,20 @@ const getUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, avatar, email } = req.body;
+  const { name, avatar, email, password } = req.body;
   User.findOne({ email }).then((user, err) => {
     if (user) {
       errorHandling(err, res);
     }
-    return bcrypt.hash(req.body.password, 10).then((hash) => {
+    return bcrypt.hash(password, 10).then((hash) => {
       User.create({ name, avatar, email, password: hash })
-        .then((data) => res.status(201).send(data))
+        .then((data) =>
+          res.setHeader('Content-Type', 'application/json').status(201).send({
+            name: data.name,
+            avatar: data.avatar,
+            email: data.email,
+          })
+        )
         .catch(() => {
           errorHandling(err, res);
         });

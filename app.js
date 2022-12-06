@@ -4,11 +4,7 @@ const cors = require('cors');
 const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3001 } = process.env;
-mongoose.connect('mongodb://localhost:27017/wtwr_db', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
 

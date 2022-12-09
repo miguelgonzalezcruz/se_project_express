@@ -12,7 +12,13 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+  'https://around.nomoreparties.co',
+  'http://around.nomoreparties.co',
+  'http://localhost:3000',
+];
+app.use(cors({ origin: allowedOrigins }));
 
 app.use('/users', require('./routes/users'));
 app.use('/items', require('./routes/clothingItems'));

@@ -1,9 +1,11 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable consistent-return */
+/* eslint-disable brace-style */
 /* eslint-disable comma-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable function-paren-newline */
 /* eslint-disable operator-linebreak */
 /* eslint-disable padded-blocks */
-/* eslint-disable object-curly-newline */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -33,11 +35,13 @@ const getUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  console.log('req in createUser:', req);
   const { name, avatar, email, password } = req.body;
   User.findOne({ email }).then((user, err) => {
+    if (err) {
+      return res.status(500).send({ message: 'Server error' });
+    }
     if (user) {
-      errorHandling(err, res);
+      return res.status(409).send({ message: 'Email already exists' });
     }
     return bcrypt.hash(password, 10).then((hash) => {
       User.create({ name, avatar, email, password: hash })

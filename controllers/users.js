@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 /* eslint-disable object-curly-newline */
 /* eslint-disable consistent-return */
 /* eslint-disable brace-style */
@@ -34,29 +35,44 @@ const getUser = (req, res) => {
     });
 };
 
+// const createUser = (req, res) => {
+//   const { name, avatar, email, password } = req.body;
+//   User.findOne({ email }).then((user, err) => {
+//     if (err) {
+//       return res.status(500).send({ message: 'Server error' });
+//     }
+//     if (user) {
+//       return res.status(409).send({ message: 'Email already exists' });
+//     }
+//     return bcrypt.hash(password, 10).then((hash) => {
+//       User.create({ name, avatar, email, password: hash })
+//         .then((data) =>
+//           res.setHeader('Content-Type', 'application/json').status(201).send({
+//             name: data.name,
+//             avatar: data.avatar,
+//             email: data.email,
+//           })
+//         )
+//         .catch(() => {
+//           errorHandling(err, res);
+//         });
+//     });
+//   });
+// };
+
 const createUser = (req, res) => {
-  const { name, avatar, email, password } = req.body;
-  User.findOne({ email }).then((user, err) => {
-    if (err) {
-      return res.status(500).send({ message: 'Server error' });
-    }
-    if (user) {
-      return res.status(409).send({ message: 'Email already exists' });
-    }
-    return bcrypt.hash(password, 10).then((hash) => {
-      User.create({ name, avatar, email, password: hash })
-        .then((data) =>
-          res.setHeader('Content-Type', 'application/json').status(201).send({
-            name: data.name,
-            avatar: data.avatar,
-            email: data.email,
-          })
-        )
-        .catch(() => {
-          errorHandling(err, res);
-        });
-    });
-  });
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) =>
+      User.create({
+        email: req.body.email,
+        name: req.body.name,
+        avatar: req.body.avatar,
+        password: hash,
+      })
+    )
+    .then((user) => res.send(user))
+    .catch((err) => errorHandling(err, res));
 };
 
 const login = (req, res) => {

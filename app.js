@@ -9,8 +9,6 @@ mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
 
-app.use(express.json());
-
 const allowedOrigins = [
   'https://around.nomoreparties.co',
   'http://around.nomoreparties.co',
@@ -18,8 +16,12 @@ const allowedOrigins = [
 ];
 app.use(cors({ origin: allowedOrigins }));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.post('/signin', login);
 app.post('/signup', createUser);
+
 app.use('/users', require('./routes/users'));
 app.use('/items', require('./routes/clothingItems'));
 

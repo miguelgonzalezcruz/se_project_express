@@ -33,8 +33,8 @@ const getUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
+  console.log('req in createUser:', req);
   const { name, avatar, email, password } = req.body;
-  console.log(req.body);
   User.findOne({ email }).then((user, err) => {
     if (user) {
       errorHandling(err, res);

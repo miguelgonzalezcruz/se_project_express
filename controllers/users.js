@@ -23,70 +23,73 @@ const getUsers = (req, res) => {
 };
 
 const getUser = (req, res) => {
-  User.findById(req.params.userId)
+  User.findById({ _id: req.user._id })
     .orFail(() => {
       orFailError();
     })
-    .then((data) => {
-      res.status(200).send(data);
+    .then((user) => {
+      res.status(200).send(user);
     })
     .catch((err) => {
       errorHandling(err, res);
     });
 };
 
-// const createUser = (req, res) => {
-//   const { name, avatar, email, password } = req.body;
-//   User.findOne({ email }).then((user, err) => {
-//     if (err) {
-//       return res.status(500).send({ message: 'Server error' });
-//     }
-//     if (user) {
-//       return res.status(409).send({ message: 'Email already exists' });
-//     }
-//     return bcrypt.hash(password, 10).then((hash) => {
-//       User.create({ name, avatar, email, password: hash })
-//         .then((data) =>
-//           res.setHeader('Content-Type', 'application/json').status(201).send({
-//             name: data.name,
-//             avatar: data.avatar,
-//             email: data.email,
-//           })
-//         )
-//         .catch(() => {
-//           errorHandling(err, res);
-//         });
-//     });
-//   });
-// };
+const updateUser = (req, res) => {
+  const { name, avatar } = req.body;
+  User.findByIdAndUpdate(
+    { _id: req.user._id },
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .orFail(() => {
+      orFailError();
+    })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      errorHandling(err, res);
+    });
+};
 
 const createUser = (req, res) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) =>
-      User.create({
-        email: req.body.email,
-        name: req.body.name,
-        avatar: req.body.avatar,
-        password: hash,
-      })
-    )
-    .then((user) => res.send(user))
-    .catch((err) => errorHandling(err, res));
+  const { name, avatar, email, password } = req.body;
+  User.findOne({ email }).then((user, err) => {
+    if (err) {
+      return res.status(500).send({ message: 'Server error' });
+    }
+    if (user) {
+      return res.status(409).send({ message: 'Email already exists' });
+    }
+    return bcrypt.hash(password, 10).then((hash) => {
+      User.create({ name, avatar, email, password: hash })
+        .then((data) =>
+          res.setHeader('Content-Type', 'application/json').status(201).send({
+            name: data.name,
+            avatar: data.avatar,
+            email: data.email,
+          })
+        )
+        .catch(() => {
+          errorHandling(err, res);
+        });
+    });
+  });
 };
 
 const login = (req, res) => {
   const { email, password } = req.body;
+
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: '7d',
+      res.send({
+        token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }),
       });
-      res.send({ token });
     })
     .catch((err) => {
       errorHandling(err, res);
     });
 };
 
-module.exports = { getUsers, getUser, createUser, login };
+module.exports = { getUsers, getUser, createUser, login, updateUser };

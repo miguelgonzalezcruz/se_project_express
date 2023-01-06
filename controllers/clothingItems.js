@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable consistent-return */
 /* eslint-disable no-undef */
 const clothingItem = require('../models/clothingItem');
@@ -45,16 +46,18 @@ const createItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  // if (req.user._id !== req.params.owner) {
-  //   return errorHandling(err, res);
-  // }
   clothingItem
-    .findByIdAndRemove(req.params.itemId)
+    .findById(req.params.itemId)
     .orFail(() => {
       orFailError();
     })
-    .then((data) => {
-      res.status(200).send(data);
+    .then((item) => {
+      if (item.owner.equals(req.user._id)) {
+        return item.remove(() => res.send({ clothingItem: item }));
+      }
+      return res
+        .status(403)
+        .send({ message: 'Insuffient permissions to delete item' });
     })
     .catch((err) => {
       errorHandling(err, res);

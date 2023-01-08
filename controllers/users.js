@@ -10,6 +10,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+// const NotFoundError = require('../errors/not-found-err');
 
 const { JWT_SECRET } = require('../utils/config');
 const { errorHandling, orFailError } = require('../utils/errors');
@@ -52,6 +53,23 @@ const updateUser = (req, res) => {
       errorHandling(err, res);
     });
 };
+
+// const updateUser = (req, res, next) => {
+//   const { name, avatar } = req.body;
+//   User.findByIdAndUpdate(
+//     { _id: req.user._id },
+//     { name, avatar },
+//     { new: true, runValidators: true }
+//   )
+//     .then((user) => {
+//       if (!user) {
+//         throw new NotFoundError('User not found');
+//       }
+
+//       res.status(200).send(user);
+//     })
+//     .catch(next);
+// };
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;

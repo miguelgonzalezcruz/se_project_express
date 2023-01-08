@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -28,6 +29,10 @@ app.use('/items', require('./routes/clothingItems'));
 app.use((req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
+
+// app.use((err, req, res, next) => {
+//   res.status(err.statusCode).send({ message: err.message });
+// });
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);

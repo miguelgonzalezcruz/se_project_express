@@ -23,7 +23,7 @@ const getUsers = (req, res) => {
     .catch(() => errorHandling(res));
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   User.findById({ _id: req.user._id })
     .orFail(() => {
       orFailError();
@@ -31,10 +31,21 @@ const getUser = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((err) => {
-      errorHandling(err, res);
-    });
+    .catch(next);
 };
+
+// const getUser = (req, res) => {
+//   User.findById({ _id: req.user._id })
+//     .orFail(() => {
+//       orFailError();
+//     })
+//     .then((user) => {
+//       res.status(200).send(user);
+//     })
+//     .catch((err) => {
+//       errorHandling(err, res);
+//     });
+// };
 
 const updateUser = (req, res) => {
   const { name, avatar } = req.body;

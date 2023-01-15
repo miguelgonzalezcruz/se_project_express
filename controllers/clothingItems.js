@@ -4,6 +4,7 @@
 /* eslint-disable no-undef */
 const clothingItem = require('../models/clothingItem');
 const { NotFoundError } = require('../middlewares/errorHandling');
+const { ConflictError } = require('../middlewares/errorHandling');
 
 const getItems = (req, res, next) => {
   clothingItem

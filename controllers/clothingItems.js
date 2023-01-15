@@ -38,7 +38,8 @@ const createItem = (req, res, next) => {
       imageUrl,
       owner,
     })
-    .orFail(() => {
+    .orFail((err) => {
+      console.log(err);
       throw new ConflictError('Test text');
     })
     .then((user) => {

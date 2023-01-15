@@ -26,7 +26,7 @@ const getItem = (req, res, next) => {
     .catch(next);
 };
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
@@ -37,28 +37,14 @@ const createItem = (req, res) => {
       imageUrl,
       owner,
     })
-    .then((data) => res.status(201).send(data))
+    .orFail(() => {
+      throw new ConflictError('Test text');
+    })
+    .then((user) => {
+      res.status(200).send(user);
+    })
     .catch(next);
 };
-
-// const deleteItem = (req, res) => {
-//   clothingItem
-//     .findById(req.params.itemId)
-//     .orFail(() => {
-//       orFailError();
-//     })
-//     .then((item) => {
-//       if (item.owner.equals(req.user._id)) {
-//         return item.remove(() => res.send({ clothingItem: item }));
-//       }
-//       return res
-//         .status(403)
-//         .send({ message: 'Insuffient permissions to delete item' });
-//     })
-//     .catch((err) => {
-//       errorHandling(err, res);
-//     });
-// };
 
 const deleteItem = async (req, res, next) => {
   try {
@@ -76,25 +62,6 @@ const deleteItem = async (req, res, next) => {
     next(err);
   }
 };
-
-// const likeItem = (req, res) => {
-//   clothingItem
-//     .findByIdAndUpdate(
-//       req.params.itemId,
-//       { $addToSet: { likes: req.user._id } },
-//       // eslint-disable-next-line comma-dangle
-//       { new: true }
-//     )
-//     .orFail(() => {
-//       orFailError();
-//     })
-//     .then((data) => {
-//       res.status(200).send(data);
-//     })
-//     .catch((err) => {
-//       errorHandling(err, res);
-//     });
-// };
 
 const likeItem = (req, res, next) => {
   clothingItem
@@ -136,3 +103,71 @@ module.exports = {
   dislikeItem,
   getItem,
 };
+// const createItem = (req, res) => {
+//   const { name, weather, imageUrl } = req.body;
+//   const owner = req.user._id;
+
+//   clothingItem
+//     .create({
+//       name,
+//       weather,
+//       imageUrl,
+//       owner,
+//     })
+//     .then((data) => res.status(201).send(data))
+//     .catch(next);
+// };
+// const deleteItem = (req, res) => {
+//   clothingItem
+//     .findById(req.params.itemId)
+//     .orFail(() => {
+//       orFailError();
+//     })
+//     .then((item) => {
+//       if (item.owner.equals(req.user._id)) {
+//         return item.remove(() => res.send({ clothingItem: item }));
+//       }
+//       return res
+//         .status(403)
+//         .send({ message: 'Insuffient permissions to delete item' });
+//     })
+//     .catch((err) => {
+//       errorHandling(err, res);
+//     });
+// };
+// const likeItem = (req, res) => {
+//   clothingItem
+//     .findByIdAndUpdate(
+//       req.params.itemId,
+//       { $addToSet: { likes: req.user._id } },
+//       // eslint-disable-next-line comma-dangle
+//       { new: true }
+//     )
+//     .orFail(() => {
+//       orFailError();
+//     })
+//     .then((data) => {
+//       res.status(200).send(data);
+//     })
+//     .catch((err) => {
+//       errorHandling(err, res);
+//     });
+// };
+// const likeItem = (req, res) => {
+//   clothingItem
+//     .findByIdAndUpdate(
+//       req.params.itemId,
+//       { $addToSet: { likes: req.user._id } },
+//       // eslint-disable-next-line comma-dangle
+//       { new: true }
+//     )
+//     .orFail(() => {
+//       orFailError();
+//     })
+//     .then((data) => {
+//       res.status(200).send(data);
+//     })
+//     .catch((err) => {
+//       errorHandling(err, res);
+//     });
+// }

@@ -32,15 +32,18 @@ const createItem = (req, res, next) => {
   const owner = req.user._id;
 
   clothingItem
-    .create({
-      name,
-      weather,
-      imageUrl,
-      owner,
-    })
-    .orFail((err) => {
-      console.log(err);
-      throw new ConflictError('Test text');
+    .findOne({ name: req.body.name, owner: req.user._id })
+    .then((item) => {
+      if (item) {
+        throw new ConflictError('Item already exists');
+      } else {
+        return clothingItem.create({
+          name,
+          weather,
+          imageUrl,
+          owner,
+        });
+      }
     })
     .then((user) => {
       res.status(200).send(user);

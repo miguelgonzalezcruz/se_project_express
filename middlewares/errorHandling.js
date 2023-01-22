@@ -2,6 +2,8 @@
 const NotFoundError = require('../errors/not-found-err');
 const UnauthorizedError = require('../errors/unauthorized-error');
 const BadRequestError = require('../errors/bad-request-err');
+const ForbiddenError = require('../errors/ForbiddenError');
+const ConflictError = require('../errors/conflict-err');
 
 module.exports = (err, req, res, next) => {
   console.error(err);
@@ -13,6 +15,12 @@ module.exports = (err, req, res, next) => {
   }
   if (err instanceof BadRequestError) {
     return res.status(400).send({ message: 'Bad request' });
+  }
+  if (err instanceof ForbiddenError) {
+    return res.status(403).send({ message: 'Not allowed' });
+  }
+  if (err instanceof ConflictError) {
+    return res.status(409).send({ message: 'Conflict Error' });
   }
   return res.status(500).send({ message: 'An error occurred on the server' });
 };

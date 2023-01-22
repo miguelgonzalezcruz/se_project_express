@@ -16,8 +16,8 @@ mongoose.connect('mongodb://localhost:27017/wtwr_db');
 const app = express();
 
 const allowedOrigins = [
-  'https://around.nomoreparties.co',
-  'http://around.nomoreparties.co',
+  'https://wtwrmgc.students.nomoredomainssbs.ru',
+  'http://wtwrmgc.students.nomoredomainssbs.ru',
   'http://localhost:3000',
 ];
 

@@ -6,7 +6,20 @@ const { getUser, updateUser, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 
 router.get('/me', auth, getUser);
-router.patch('/me', auth, updateUser);
+router.patch(
+  '/me',
+  auth,
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      avatar: Joi.string().required().uri(),
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+      _id: Joi.string().hex().alphanum().length(24),
+    }),
+  }),
+  updateUser
+);
 router.post(
   '/',
   celebrate({
@@ -15,6 +28,7 @@ router.post(
       avatar: Joi.string().required().uri(),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
+      _id: Joi.string().hex().alphanum().length(24),
     }),
   }),
   createUser

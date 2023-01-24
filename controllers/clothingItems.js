@@ -3,8 +3,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-undef */
 const clothingItem = require('../models/clothingItem');
-const { NotFoundError } = require('../middlewares/errorHandling');
-const { ConflictError } = require('../middlewares/errorHandling');
+const { NotFoundError } = require('../errors/not-found-err');
+const { ConflictError } = require('../errors/conflict-err');
 
 const getItems = (req, res, next) => {
   clothingItem

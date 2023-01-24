@@ -5,6 +5,8 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const rateLimit = require('./middlewares/limiter');
+const helmet = require('./middlewares/helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandling = require('./middlewares/errorHandling');
 
@@ -14,6 +16,8 @@ const { PORT = 3001 } = process.env;
 mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
+app.use(rateLimit);
+app.use(helmet);
 
 const allowedOrigins = [
   'https://wtwrmgc.students.nomoredomainssbs.ru',

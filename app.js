@@ -5,7 +5,7 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const rateLimit = require('./middlewares/limiter');
+const limiter = require('./middlewares/limiter');
 const helmet = require('./middlewares/helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandling = require('./middlewares/errorHandling');
@@ -16,8 +16,6 @@ const { PORT = 3001 } = process.env;
 mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
-app.use(rateLimit);
-app.use(helmet);
 
 const allowedOrigins = [
   'https://wtwrmgc.students.nomoredomainssbs.ru',
@@ -26,6 +24,9 @@ const allowedOrigins = [
 ];
 
 app.use(cors({ origin: allowedOrigins }));
+
+app.use(limiter);
+app.use(helmet);
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
@@ -60,14 +61,6 @@ app.use('/items', require('./routes/clothingItems'), errorHandling);
 app.use(errorLogger);
 
 app.use(errorHandling);
-
-// app.use((err, req, res, next) => {
-//   if (err.statusCode) {
-//     res.status(err.statusCode).send({ message: err.message });
-//   } else {
-//     res.status(500).send({ message: 'An error occurred on the server' });
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);

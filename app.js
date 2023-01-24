@@ -15,8 +15,6 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-// const limiter = require('./middlewares/limiter');
-// const helmet = require('./middlewares/helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandling = require('./middlewares/errorHandling');
 
@@ -42,7 +40,7 @@ app.use(helmet());
 app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', origin);
   }
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
   res.header(

@@ -5,7 +5,17 @@ const { celebrate, Joi } = require('celebrate');
 const { getUser, updateUser, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 
-router.get('/me', auth, getUser);
+router.get(
+  '/me',
+  auth,
+  celebrate({
+    params: Joi.object().keys({
+      _id: Joi.string().hex().alphanum().length(24),
+    }),
+  }),
+  getUser
+);
+
 router.patch(
   '/me',
   auth,

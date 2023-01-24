@@ -5,16 +5,7 @@ const { celebrate, Joi } = require('celebrate');
 const { getUser, updateUser, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 
-router.get(
-  '/me',
-  auth,
-  celebrate({
-    params: Joi.object().keys({
-      _id: Joi.string().hex().alphanum().length(24),
-    }),
-  }),
-  getUser
-);
+router.get('/me', auth, getUser);
 
 router.patch(
   '/me',
@@ -25,7 +16,7 @@ router.patch(
       avatar: Joi.string().required().uri(),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
-      _id: Joi.string().hex().alphanum().length(24),
+      // _id: Joi.string().hex().alphanum().length(24),
     }),
   }),
   updateUser
@@ -38,7 +29,7 @@ router.post(
       avatar: Joi.string().required().uri(),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
-      _id: Joi.string().hex().alphanum().length(24),
+      // _id: Joi.string().hex().alphanum().length(24),
     }),
   }),
   createUser

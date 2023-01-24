@@ -7,6 +7,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { celebrate, Joi } = require('celebrate');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -60,8 +61,30 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+    }),
+  }),
+  login
+);
+
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().required().min(2).max(30),
+      avatar: Joi.string().required().uri(),
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+      _id: Joi.string().hex().alphanum().length(24),
+    }),
+  }),
+  createUser
+);
 
 app.use('/users', require('./routes/users'), errorHandling);
 app.use('/items', require('./routes/clothingItems'), errorHandling);

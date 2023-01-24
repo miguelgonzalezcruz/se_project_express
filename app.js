@@ -5,8 +5,8 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const limiter = require('./middlewares/limiter');
-const helmet = require('./middlewares/helmet');
+// const limiter = require('./middlewares/limiter');
+// const helmet = require('./middlewares/helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandling = require('./middlewares/errorHandling');
 
@@ -25,8 +25,8 @@ const allowedOrigins = [
 
 app.use(cors({ origin: allowedOrigins }));
 
-app.use(limiter);
-app.use(helmet);
+// app.use(limiter);
+// app.use(helmet);
 
 app.use((req, res, next) => {
   const { origin } = req.headers;

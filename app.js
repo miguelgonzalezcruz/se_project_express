@@ -24,8 +24,6 @@ const { PORT = 3001 } = process.env;
 mongoose.connect('mongodb://localhost:27017/wtwr_db');
 
 const app = express();
-app.use(limiter);
-app.use(helmet());
 
 const allowedOrigins = [
   'https://wtwrmgc.students.nomoredomainssbs.ru',
@@ -47,7 +45,8 @@ app.use((req, res, next) => {
   );
   next();
 });
-
+app.use(limiter);
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

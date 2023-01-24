@@ -68,7 +68,6 @@ app.post(
       avatar: Joi.string().required().uri(),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
-      _id: Joi.string().hex().alphanum().length(24),
     }),
   }),
   createUser
